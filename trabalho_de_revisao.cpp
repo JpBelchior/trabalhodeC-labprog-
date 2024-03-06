@@ -11,13 +11,13 @@ struct Disciplina {int codigoD; string nomeD; string professor; int credito; };
 
 struct Matricula {int codigo_aluno; int codigo_disciplina; string periodo; };
 
-void inicializacao();
-void arquivo_de_dados();
-void inserir_aluno();
+void inicializacao(); // menu de opçoes
+void arquivo_de_dados(); //inserindo os dados de cada vector no arquivo
+void inserir_aluno(); 
 void inserir_disciplina();
 void realizar_matricula();
 void remover_disciplina();
-void carregarDados();
+void carregarDados(); // lendo os dados escritos no arquivo de texto
 void disciplinas_do_aluno();
 void remover_aluno();
 void alunos_da_disciplina();
@@ -80,9 +80,11 @@ int main(){
 
 
 void arquivo_de_dados(){
-    ofstream arquivo("Dados.txt");
+    ofstream arquivo("Dados.txt");//abertura de arquivo para escrita
     arquivo << "Alunos Cadastrados: \n";
-    for(const auto& aluno : alunos){
+    for(const auto& aluno : alunos)/*definimos a variavel aluno que representara cada elemento do vector aluno, auto defini automaticamente
+    o tipo de variavel e o const é pra nao altera-la durante o loop*/
+    {
         arquivo << aluno.codigoA << ' ' << aluno.nomeA<<' '<< aluno.CPF;}
 
     arquivo<< "Disciplinas Cadastradas: \n";
@@ -97,19 +99,20 @@ arquivo.close();
 }
 
 void carregarDados() {
-    ifstream arquivo("Dados.txt");
+    ifstream arquivo("Dados.txt");//abertura de arquivo para leitura
     if (!arquivo.is_open()) {
         return;
     }
 
     string linha;
-    while (getline(arquivo, linha)) {
+    while (getline(arquivo, linha))//lendo o arquivo armazenando uma string
+     {
         if (linha == "Alunos Cadastrados: \n") {
             while (getline(arquivo, linha) && linha != "Disciplinas Cadastradas: \n") {
                 Aluno aluno;
-                stringstream ss(linha);
+                stringstream ss(linha); //divide a string nos espaços conseguindo separar codigo nome e cpf.
                 ss >> aluno.codigoA >> aluno.nomeA >> aluno.CPF;
-                alunos.push_back(aluno);
+                alunos.push_back(aluno); // adicionando parte do arquivo no vector
             }
         } else if (linha == "Disciplinas Cadastradas: \n") {
             while (getline(arquivo, linha) && linha != "Matriculas feitas:\n") {
@@ -187,8 +190,9 @@ void remover_aluno(){
     int codigo=0;
     cout<<"\n Digite o codigo do aluno que sera removido:\n";
     cin>> codigo;
-    for(auto i= alunos.begin(); i!=alunos.end(); i++){
-        if(i->codigoA == codigo)//i está toamndo o valor de cada elemento do vetor que por si é uma struct
+    for(auto i= alunos.begin(); i!=alunos.end(); i++)//criando ima variavel i do tipo do elemento de alunos e vasculhando o vector do inicio ao fim
+        {
+        if(i->codigoA == codigo)//i está toamndo o valor de cada elemento do vetor e apontando pra o odigo daquela struct
         {
             alunos.erase(i);
             cout<<"Aluno de codigo " <<codigo << " removido\n";
@@ -204,7 +208,7 @@ void remover_disciplina(){
     cout<<"\n Digite o codigo da disciplina que será removida:\n";
     cin>> codigo;
     for(auto i= disciplinas.begin(); i!=disciplinas.end(); i++){
-        if(i->codigoD == codigo)//i está toamndo o valor de cada elemento do vetor que por si é uma struct
+        if(i->codigoD == codigo)
         {
             disciplinas.erase(i);
             cout<<"Disciplina de codigo" <<codigo << " removida\n";
@@ -245,7 +249,6 @@ void alunos_da_disciplina(){
     for(auto i= matriculas.begin(); i!=matriculas.end(); i++){
         if(i->codigo_disciplina==codigo){
             disciplinaencontrada = true;
-            
             for(auto j=alunos.begin(); j!=alunos.end();j++){
                 if(j->codigoA == i->codigo_aluno){
                     z+=1;
