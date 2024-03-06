@@ -13,13 +13,13 @@ struct Matricula {int codigo_aluno; int codigo_disciplina; string periodo; };
 
 void inicializacao(); // menu de opçoes
 void arquivo_de_dados(); //inserindo os dados de cada vector no arquivo
-void inserir_aluno(); 
-void inserir_disciplina();
-void realizar_matricula();
-void remover_disciplina();
+void inserir_aluno(); // adicionando alunos no vector alunos
+void inserir_disciplina();// adicionando diciplina no vector disciplinas
+void realizar_matricula();// adicionando a matricula no vector matriculas
+void remover_disciplina();// removendo disciplina do vector disciplina
 void carregarDados(); // lendo os dados escritos no arquivo de texto
 void disciplinas_do_aluno();
-void remover_aluno();
+void remover_aluno();// removendo aluno do vector alunos
 void alunos_da_disciplina();
 
 
@@ -48,6 +48,7 @@ int main(){
         case 3:
             cout<<"\n Voce escolheu a opcao de insercao de disciplina:\n Para isso, siga os comandos a seguir.\n";
             inserir_disciplina();
+
             break;
 
         case 4:
@@ -71,6 +72,15 @@ int main(){
             break;
         
         case 8:
+            cout<< "\n Salvamos os dados inseridos!\n";
+            arquivo_de_dados();
+            break;
+        case 9:
+            cout<< "\n Carregamos os dados!\n";
+            carregarDados();
+            break;
+
+        case 10:
             cout<<"\n Voce escolheu encerrar o programa!";
             return 0;
     }
@@ -82,18 +92,18 @@ int main(){
 void arquivo_de_dados(){
     ofstream arquivo("Dados.txt");//abertura de arquivo para escrita
     arquivo << "Alunos Cadastrados: \n";
-    for(const auto& aluno : alunos)/*definimos a variavel aluno que representara cada elemento do vector aluno, auto defini automaticamente
+    for(const Aluno& aluno : alunos)/*definimos a variavel aluno que representara cada elemento do vector aluno, auto defini automaticamente
     o tipo de variavel e o const é pra nao altera-la durante o loop*/
     {
-        arquivo << aluno.codigoA << ' ' << aluno.nomeA<<' '<< aluno.CPF;}
+        arquivo << aluno.codigoA << ' ' << aluno.nomeA<<' '<< aluno.CPF <<"\n";}
 
     arquivo<< "Disciplinas Cadastradas: \n";
-    for(const auto& disciplina : disciplinas){
-        arquivo << disciplina.codigoD << ' '<< disciplina.nomeD << ' '<< disciplina.professor<< ' '<< disciplina.credito;}
+    for(const Disciplina& disciplina : disciplinas){
+        arquivo << disciplina.codigoD << ' '<< disciplina.nomeD << ' '<< disciplina.professor<< ' '<< disciplina.credito<< "\n";}
 
     arquivo<< "Matriculas feitas:\n";
-    for(const auto& matricula : matriculas){
-        arquivo<< matricula.codigo_aluno << ' '<< matricula.codigo_disciplina << ' '<< matricula.periodo;
+    for(const Matricula& matricula : matriculas){
+        arquivo<< matricula.codigo_aluno << ' '<< matricula.codigo_disciplina << ' '<< matricula.periodo << "\n";
 }
 arquivo.close();
 }
@@ -137,18 +147,20 @@ void carregarDados() {
 void inicializacao(){
     cout<< " =====MENU=====\n";
     cout<<"1. Inserir Aluno."<< endl;
-    cout<<"2. Remover Aluno" << endl;
-    cout<<"3. Inserir Disciplina "<< endl;
-    cout<<"4. Remover Disciplina"<< endl;
-    cout<<"5. Realizar matrícula"<< endl;
-    cout<<"6. Alunos nessa disciplina"<< endl;
-    cout<<"7. Disciplinas desse Aluno"<< endl;
-    cout<<"8. Fechar Programa.\n";
+    cout<<"2. Remover Aluno." << endl;
+    cout<<"3. Inserir Disciplina. "<< endl;
+    cout<<"4. Remover Disciplina."<< endl;
+    cout<<"5. Realizar matrícula."<< endl;
+    cout<<"6. Alunos nessa disciplina."<< endl;
+    cout<<"7. Disciplinas desse Aluno."<< endl;
+    cout<<"8. Salvamentos de dados.\n";
+    cout<<"9. Carregamento de dados.\n";
+    cout<<"10. Fechar o programa.\n";
 }
 
 void inserir_aluno(){
     Aluno aluno;
-    cout<< "Escreva o codigo do aluno:\n";
+    cout<< " Escreva o codigo do aluno:\n RESTRICAO: Primeiro numero diferente de 0 \n";
     cin>> aluno.codigoA;
     cout<<"\n Escreva o nome do aluno:\n";
     cin.ignore();
@@ -161,9 +173,9 @@ void inserir_aluno(){
 
 void inserir_disciplina(){
     Disciplina disciplina;
-    cout<<"Escreva o codigo da disciplina:\n";
+    cout<<" Escreva o codigo da disciplina:\n";
     cin>> disciplina.codigoD;
-    cout<<"\nEscreva o nome da disciplina:\n";
+    cout<<"\n Escreva o nome da disciplina:\n (Se tiver um numero digite em algarismos romanos)\n";
     cin.ignore();
     getline(cin,disciplina.nomeD);
     cout<<"\n Escreva o nome do professor da disciplina:\n";
@@ -207,7 +219,8 @@ void remover_disciplina(){
     int codigo=0;
     cout<<"\n Digite o codigo da disciplina que será removida:\n";
     cin>> codigo;
-    for(auto i= disciplinas.begin(); i!=disciplinas.end(); i++){
+    vector<Disciplina>::iterator i;
+    for( i= disciplinas.begin(); i!=disciplinas.end(); i++){
         if(i->codigoD == codigo)
         {
             disciplinas.erase(i);
@@ -224,10 +237,12 @@ void disciplinas_do_aluno(){
     bool alunoencontrado=false;
     cout<<"\n Digite o codigo do aluno:\n";
     cin>> codigo;
-    for(auto i= matriculas.begin(); i!=matriculas.end(); i++){
+    vector<Matricula>::iterator i;
+    for( i= matriculas.begin(); i!=matriculas.end(); i++){
         if(i->codigo_aluno  == codigo){
             cout<<"\n Essas sao as disciplinas que esse aluno esta cursando:\n";
-            for(auto j=disciplinas.begin(); j!=disciplinas.end();j++){
+            vector<Disciplina>::iterator j;
+            for(j=disciplinas.begin(); j!=disciplinas.end();j++){
                 if(j->codigoD== i-> codigo_disciplina){
                     z+=1;
                     cout<< z << '.' << j-> nomeD<< "\n";
@@ -246,10 +261,12 @@ void alunos_da_disciplina(){
     cout<<"\n Digite o codigo da disciplina:\n";
     cin>> codigo;
     cout<<"\n Esses sao os alunos que estao matriculados nessa disciplina:\n";
-    for(auto i= matriculas.begin(); i!=matriculas.end(); i++){
+    vector<Matricula>::iterator i;
+    for(i= matriculas.begin(); i!=matriculas.end(); i++){
         if(i->codigo_disciplina==codigo){
             disciplinaencontrada = true;
-            for(auto j=alunos.begin(); j!=alunos.end();j++){
+            vector<Aluno>::iterator j;
+            for( j=alunos.begin(); j!=alunos.end();j++){
                 if(j->codigoA == i->codigo_aluno){
                     z+=1;
                     cout<< z << '.' << j->nomeA<< "\n";
