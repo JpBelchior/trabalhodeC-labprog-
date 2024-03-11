@@ -48,13 +48,11 @@ int main(){
         case 3:
             cout<<"\n Voce escolheu a opcao de insercao de disciplina:\n Para isso, siga os comandos a seguir.\n";
             inserir_disciplina();
-
             break;
 
         case 4:
             cout<<"\n Voce escolheu a opcao de remocao de disciplina:\n Para isso, siga os comandos a seguir.\n";
             remover_disciplina();
-
             break;
 
         case 5:
@@ -77,6 +75,7 @@ int main(){
             break;
         case 9:
             cout<< "\n Carregamos os dados!\n";
+            cout<< "\n Aqui esta a lista cadastrada ate agora:\n \n";
             carregarDados();
             break;
 
@@ -91,19 +90,19 @@ int main(){
 
 void arquivo_de_dados(){
     ofstream arquivo("Dados.txt");//abertura de arquivo para escrita
-    arquivo << "Alunos Cadastrados: \n";
+    arquivo << "Alunos Cadastrados:\n";
     for(const Aluno& aluno : alunos)/*definimos a variavel aluno que representara cada elemento do vector aluno, auto defini automaticamente
     o tipo de variavel e o const é pra nao altera-la durante o loop*/
     {
-        arquivo << aluno.codigoA << ' ' << aluno.nomeA<<' '<< aluno.CPF <<"\n";}
+        arquivo << aluno.codigoA << "\n" << aluno.nomeA<<"\n"<< aluno.CPF <<"\n";}
 
-    arquivo<< "Disciplinas Cadastradas: \n";
+    arquivo<< "Disciplinas Cadastradas:\n";
     for(const Disciplina& disciplina : disciplinas){
-        arquivo << disciplina.codigoD << ' '<< disciplina.nomeD << ' '<< disciplina.professor<< ' '<< disciplina.credito<< "\n";}
+        arquivo << disciplina.codigoD << "\n"<< disciplina.nomeD << "\n"<< disciplina.professor<<"\n"<< disciplina.credito<< "\n";}
 
     arquivo<< "Matriculas feitas:\n";
     for(const Matricula& matricula : matriculas){
-        arquivo<< matricula.codigo_aluno << ' '<< matricula.codigo_disciplina << ' '<< matricula.periodo << "\n";
+        arquivo<< matricula.codigo_aluno << "\n"<< matricula.codigo_disciplina << "\n"<< matricula.periodo << "\n";
 }
 arquivo.close();
 }
@@ -114,31 +113,51 @@ void carregarDados() {
         return;
     }
 
-    string linha;
+    string linha, linhaanterior;
     while (getline(arquivo, linha))//lendo o arquivo armazenando uma string
      {
-        if (linha == "Alunos Cadastrados: \n") {
-            while (getline(arquivo, linha) && linha != "Disciplinas Cadastradas: \n") {
+        if (linha == "Alunos Cadastrados:") {
+            cout<< "\nAlunos ate agora:(Codigo, nome, CPF)\n";}
+            while (getline(arquivo, linha) && linha != "Disciplinas Cadastradas:") {
                 Aluno aluno;
-                stringstream ss(linha); //divide a string nos espaços conseguindo separar codigo nome e cpf.
-                ss >> aluno.codigoA >> aluno.nomeA >> aluno.CPF;
-                alunos.push_back(aluno); // adicionando parte do arquivo no vector
+                aluno.codigoA = stoi(linha);
+                getline(arquivo, linha);
+                aluno.nomeA = linha;
+                getline(arquivo, linha);
+                aluno.CPF = stoi(linha);
+                cout << aluno.codigoA << ' ' << aluno.nomeA << ' ' << aluno.CPF << '\n';
+                alunos.push_back(aluno);
+                
             }
-        } else if (linha == "Disciplinas Cadastradas: \n") {
-            while (getline(arquivo, linha) && linha != "Matriculas feitas:\n") {
+        if (linha == "Disciplinas Cadastradas:") {
+             cout<< "\nDisciplinas ate agora:(Codigo, nome, professor, creditos)\n";}
+             while (getline(arquivo, linha) && linha != "Matriculas feitas:") {
                 Disciplina disciplina;
-                stringstream ss(linha);
-                ss >> disciplina.codigoD >> disciplina.nomeD >> disciplina.professor >> disciplina.credito;
+                disciplina.codigoD = stoi(linha);
+                getline(arquivo, linha);
+                disciplina.nomeD = linha;
+                getline(arquivo, linha);
+                disciplina.professor = linha;
+                getline(arquivo, linha);
+                disciplina.credito = stoi(linha);
+                cout << disciplina.codigoD << ' ' << disciplina.nomeD << ' ' << disciplina.professor << ' ' << disciplina.credito << '\n';
                 disciplinas.push_back(disciplina);
             }
-        } else if (linha == "Matriculas feitas:\n") {
+        if (linha == "Matriculas feitas:") {
+            cout<< "\nMatriculas ate agora:(codigo do aluno, codigo da disciplina, periodo)\n";}
+            if(arquivo.eof()){
+            cout<<"Nao ha alunos matriculados\n\n";}
             while (getline(arquivo, linha)) {
                 Matricula matricula;
-                stringstream ss(linha);
-                ss >> matricula.codigo_aluno >> matricula.codigo_disciplina >> matricula.periodo;
-                matriculas.push_back(matricula);
-            }
-        }
+                matricula.codigo_aluno = stoi(linha);
+                getline(arquivo, linha);
+                matricula.codigo_disciplina = stoi(linha);
+                getline(arquivo, linha);
+                matricula.periodo = linha;
+                cout << matricula.codigo_aluno << ' ' << matricula.codigo_disciplina << ' ' << matricula.periodo << '\n';
+             matriculas.push_back(matricula);
+    }
+
     }
 
     arquivo.close();
@@ -166,14 +185,13 @@ void inserir_aluno(){
     cin.ignore();
     getline(cin,aluno.nomeA);
     cout<< "\n Escreva o CPF do aluno:\n";
-    cin.ignore();
     cin>>aluno.CPF;
     alunos.push_back(aluno);
 }
 
 void inserir_disciplina(){
     Disciplina disciplina;
-    cout<<" Escreva o codigo da disciplina:\n";
+    cout<<" Escreva o codigo da disciplina:\n"<< "OBS: ocodigo nao pode começar com 0.\n";
     cin>> disciplina.codigoD;
     cout<<"\n Escreva o nome da disciplina:\n (Se tiver um numero digite em algarismos romanos)\n";
     cin.ignore();
@@ -200,36 +218,47 @@ void realizar_matricula(){
 
 void remover_aluno(){
     int codigo=0;
+    bool n=false;
     cout<<"\n Digite o codigo do aluno que sera removido:\n";
     cin>> codigo;
+    vector<Matricula>:: iterator j;
+    for( j= matriculas.begin(); j!=matriculas.end(); j++){
+        if(j->codigo_aluno == codigo)
+        {   
+            matriculas.erase(j-1);}}
     for(auto i= alunos.begin(); i!=alunos.end(); i++)//criando ima variavel i do tipo do elemento de alunos e vasculhando o vector do inicio ao fim
         {
         if(i->codigoA == codigo)//i está toamndo o valor de cada elemento do vetor e apontando pra o odigo daquela struct
-        {
-            alunos.erase(i);
+        {   n=true;
+            alunos.erase(i-1);
             cout<<"Aluno de codigo " <<codigo << " removido\n";
         }
-        else{
-            cout<<"\n Aluno nao encontrado\n";
-        }
     }
+    if(!n){
+    cout<< "\nAluno nao encontrado.\n";}
 }
 
 void remover_disciplina(){
     int codigo=0;
-    cout<<"\n Digite o codigo da disciplina que será removida:\n";
+    bool n=false;
+    cout<<"\n Digite o codigo da disciplina que sera removida:\n";
     cin>> codigo;
+    vector<Matricula>:: iterator j;
+    for( j= matriculas.begin(); j!=matriculas.end(); j++){
+        if(j->codigo_disciplina == codigo)
+        {   cout<<"havia alunos cadastrados nessa disciplina.\n";
+            matriculas.erase(j-1);}}
     vector<Disciplina>::iterator i;
     for( i= disciplinas.begin(); i!=disciplinas.end(); i++){
         if(i->codigoD == codigo)
-        {
-            disciplinas.erase(i);
-            cout<<"Disciplina de codigo" <<codigo << " removida\n";
-        }
-        else{
-            cout<<"\n Disciplina nao encontrado\n";
+        {   n=true;
+            disciplinas.erase(i-1);
+            cout<<"Disciplina de codigo " <<codigo << " removida.\n";
         }
     }
+    if(!n){
+    cout<<"\n Disciplina nao encontrada.\n";}
+
 }
 
 void disciplinas_do_aluno(){
@@ -251,7 +280,7 @@ void disciplinas_do_aluno(){
         }
     }
     if(!alunoencontrado){
-        cout << "\nNão há disciplina cadastrada com esse código!\n";   
+        cout << "\nNao ha disciplina cadastrada com esse c0digo!\n";   
     }
 }
 
@@ -275,6 +304,6 @@ void alunos_da_disciplina(){
         }
     }
     if(!disciplinaencontrada){
-        cout << "\nNão há disciplina cadastrada com esse código!\n";
+        cout << "\nNao ha disciplina cadastrada com esse codigo!\n";
     }
 }

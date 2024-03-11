@@ -1,3 +1,20 @@
-Alunos Cadastrados: 
-10101 trolo 21232123 Disciplinas Cadastradas: 
+Alunos Cadastrados:
+10101
+joao
+123456879
+12121
+belchior
+212131321
+Disciplinas Cadastradas:
+2121
+historia
+joel
+2
+3213
+fisica III
+miguel
+4
 Matriculas feitas:
+12121
+3213
+2023.1
