@@ -21,7 +21,7 @@ void carregarDados(); // lendo os dados escritos no arquivo de texto
 void disciplinas_do_aluno();
 void remover_aluno();// removendo aluno do vector alunos
 void alunos_da_disciplina();
-
+void lista_de_alunos_disciplinas();
 
 vector <Aluno> alunos;
 vector <Disciplina> disciplinas;
@@ -74,9 +74,9 @@ int main(){
             arquivo_de_dados();
             break;
         case 9:
-            cout<< "\n Carregamos os dados!\n";
+            cout<< "\n Carregamos os dados\n";
             cout<< "\n Aqui esta a lista cadastrada ate agora:\n \n";
-            carregarDados();
+            lista_de_alunos_disciplinas();
             break;
 
         case 10:
@@ -107,7 +107,7 @@ void arquivo_de_dados(){
 arquivo.close();
 }
 
-void carregarDados() {
+void lista_de_alunos_disciplinas() {
     ifstream arquivo("Dados.txt");//abertura de arquivo para leitura
     if (!arquivo.is_open()) {
         return;
@@ -169,11 +169,11 @@ void inicializacao(){
     cout<<"2. Remover Aluno." << endl;
     cout<<"3. Inserir Disciplina. "<< endl;
     cout<<"4. Remover Disciplina."<< endl;
-    cout<<"5. Realizar matrícula."<< endl;
+    cout<<"5. Realizar matricula."<< endl;
     cout<<"6. Alunos nessa disciplina."<< endl;
     cout<<"7. Disciplinas desse Aluno."<< endl;
     cout<<"8. Salvamentos de dados.\n";
-    cout<<"9. Carregamento de dados.\n";
+    cout<<"9. Carregamento de dados:\nLista de alunos, disciplinas e matriculas ate o ultimo salvamento.\n";
     cout<<"10. Fechar o programa.\n";
 }
 
@@ -224,15 +224,20 @@ void remover_aluno(){
     vector<Matricula>:: iterator j;
     for( j= matriculas.begin(); j!=matriculas.end(); j++){
         if(j->codigo_aluno == codigo)
-        {   
-            matriculas.erase(j-1);}}
-    for(auto i= alunos.begin(); i!=alunos.end(); i++)//criando ima variavel i do tipo do elemento de alunos e vasculhando o vector do inicio ao fim
+        {   cout<<"esse alunos estava cursando algumas disciplinas.\n";
+           j= matriculas.erase(j);}
+        else 
+            j++;}
+    vector<Aluno> :: iterator i;
+    for( i= alunos.begin(); i!=alunos.end();)//criando ima variavel i do tipo do elemento de alunos e vasculhando o vector do inicio ao fim
         {
         if(i->codigoA == codigo)//i está toamndo o valor de cada elemento do vetor e apontando pra o odigo daquela struct
         {   n=true;
-            alunos.erase(i-1);
+            i=alunos.erase(i);
             cout<<"Aluno de codigo " <<codigo << " removido\n";
         }
+        else
+            i++;
     }
     if(!n){
     cout<< "\nAluno nao encontrado.\n";}
@@ -244,22 +249,27 @@ void remover_disciplina(){
     cout<<"\n Digite o codigo da disciplina que sera removida:\n";
     cin>> codigo;
     vector<Matricula>:: iterator j;
-    for( j= matriculas.begin(); j!=matriculas.end(); j++){
+    for( j= matriculas.begin(); j!=matriculas.end();){
         if(j->codigo_disciplina == codigo)
-        {   cout<<"havia alunos cadastrados nessa disciplina.\n";
-            matriculas.erase(j-1);}}
+        {   cout<<"havia alunos matriculados nessa disciplina.\n";
+            matriculas.erase(j);}
+        else 
+            j++;}
     vector<Disciplina>::iterator i;
-    for( i= disciplinas.begin(); i!=disciplinas.end(); i++){
+    for( i= disciplinas.begin(); i!=disciplinas.end();){
         if(i->codigoD == codigo)
         {   n=true;
-            disciplinas.erase(i-1);
+           i= disciplinas.erase(i);
             cout<<"Disciplina de codigo " <<codigo << " removida.\n";
         }
+        else
+        i++;
     }
     if(!n){
     cout<<"\n Disciplina nao encontrada.\n";}
-
-}
+    else
+    cout<<"prosseguindo.. \n";
+    }
 
 void disciplinas_do_aluno(){
     int z=0, codigo;
