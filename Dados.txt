@@ -1,7 +1,23 @@
 Alunos Cadastrados:
+12121
+joao
+231312321
+32123
+Maria
+234564212
 Disciplinas Cadastradas:
 4123
 geografia
 ronaldo
 3
+3333
+historia
+theo
+4
 Matriculas feitas:
+12121
+4123
+2021.1
+32123
+3333
+2021.1

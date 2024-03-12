@@ -22,6 +22,7 @@ void disciplinas_do_aluno();
 void remover_aluno();// removendo aluno do vector alunos
 void alunos_da_disciplina();
 void lista_de_alunos_disciplinas();
+void Lista_periodo();
 
 vector <Aluno> alunos;
 vector <Disciplina> disciplinas;
@@ -78,8 +79,11 @@ int main(){
             cout<< "\n Aqui esta a lista cadastrada ate agora:\n \n";
             lista_de_alunos_disciplinas();
             break;
-
         case 10:
+            cout<<"\n Voce escolheu a listagem de alunos e disciplinas por periodo:\n";
+            Lista_periodo();
+            break;
+        case 11:
             cout<<"\n Voce escolheu encerrar o programa!";
             return 0;
     }
@@ -174,7 +178,8 @@ void inicializacao(){
     cout<<"7. Disciplinas desse Aluno."<< endl;
     cout<<"8. Salvamentos de dados.\n";
     cout<<"9. Carregamento de dados:\nLista de alunos, disciplinas e matriculas ate o ultimo salvamento.\n";
-    cout<<"10. Fechar o programa.\n";
+    cout<<"10.Listagem de alunos e disciplinas por periodo:\n";
+    cout<<"11. Fechar o programa.\n";
 }
 
 void inserir_aluno(){
@@ -290,7 +295,7 @@ void disciplinas_do_aluno(){
         }
     }
     if(!alunoencontrado){
-        cout << "\nNao ha disciplina cadastrada com esse c0digo!\n";   
+        cout << "\nNao ha aluno cadastrado com esse codigo!\n";   
     }
 }
 
@@ -315,5 +320,49 @@ void alunos_da_disciplina(){
     }
     if(!disciplinaencontrada){
         cout << "\nNao ha disciplina cadastrada com esse codigo!\n";
+    }
+}
+
+void Lista_periodo(){
+    string per;
+    Aluno aluno;
+    Disciplina disciplina;
+    int a=0, d=0;
+    bool periodoencontrado=false , alunoencontrado=false, disciplinaencontrada=false;
+    cout<<"\n Escolha o periodo para ser listado:(EX: 2018.1)\n";
+    cout<<"\n Alunos matriculados no periodo "<<per<<":"<< endl;
+    cin>>per;
+    vector<Matricula>:: iterator i;
+    for( i=matriculas.begin();i!=matriculas.end(); i++){
+        if(i->periodo == per){
+            periodoencontrado=true;
+            vector<Aluno> :: iterator j;
+            for(j=alunos.begin(); j!=alunos.end(); j++){
+                if(i->codigo_aluno == j->codigoA){
+                    alunoencontrado=true;
+                    a+=1;
+                    cout<<a<<"." <<j->nomeA<< "\n";
+                }
+            }
+            if(!alunoencontrado){
+                cout<<"\nNao ha aluno cadastrado com esse codigo!\n"; 
+            }}}
+    cout<<"\n Disciplinas matriculadas nesse periodo:\n"<<per<<":"<< endl;
+    for( i=matriculas.begin();i!=matriculas.end(); i++){
+        if(i->periodo == per){
+            vector<Disciplina> :: iterator k;
+            for(k=disciplinas.begin(); k!=disciplinas.end(); k++){
+                if(i->codigo_disciplina == k->codigoD){
+                    disciplinaencontrada=true;
+                    d+=1;
+                    cout<<d<<"." <<k->nomeD<< "\n";
+                }
+            }}
+            if(!disciplinaencontrada){
+                cout << "\nNao ha disciplina cadastrada com esse codigo!\n";}
+        }
+    
+    if(!periodoencontrado){
+        cout << "\nNao ha esse periodo na faculdade!\n"; 
     }
 }
