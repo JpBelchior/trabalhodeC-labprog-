@@ -1,23 +1,29 @@
 Alunos Cadastrados:
-12121
+10000
 joao
-231312321
-32123
-Maria
-234564212
+231.324.112-32
+20000
+romeu
+495.823.122-42
+30000
+teodoro
+968.273.412-00
+40000
+tulio
+757.737.821-09
 Disciplinas Cadastradas:
-4123
-geografia
-ronaldo
-3
-3333
+2121
 historia
-theo
-4
+roberto
+1
+1000
+geografia
+sara
+2
 Matriculas feitas:
-12121
-4123
-2021.1
-32123
-3333
+10000
+1000
+2022.1
+20000
+2121
 2021.1

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-struct Aluno {int codigoA; string nomeA; int CPF; };
+struct Aluno {int codigoA; string nomeA; string CPF; };
 
 struct Disciplina {int codigoD; string nomeD; string professor; int credito; };
 
@@ -21,8 +21,9 @@ void carregarDados(); // lendo os dados escritos no arquivo de texto
 void disciplinas_do_aluno();
 void remover_aluno();// removendo aluno do vector alunos
 void alunos_da_disciplina();
-void lista_de_alunos_disciplinas();
+void carregamentodados();
 void Lista_periodo();
+void lista_de_alunos_disciplinas();
 
 vector <Aluno> alunos;
 vector <Disciplina> disciplinas;
@@ -31,6 +32,7 @@ vector <Matricula> matriculas;
 
 int main(){
     int opcao=0;
+    carregamentodados();
     inicio:
     inicializacao();
     cout<< " Bom dia!\n"<< " Digite o numero da sua opcao:\n ";
@@ -75,7 +77,6 @@ int main(){
             arquivo_de_dados();
             break;
         case 9:
-            cout<< "\n Carregamos os dados\n";
             cout<< "\n Aqui esta a lista cadastrada ate agora:\n \n";
             lista_de_alunos_disciplinas();
             break;
@@ -111,7 +112,7 @@ void arquivo_de_dados(){
 arquivo.close();
 }
 
-void lista_de_alunos_disciplinas() {
+void carregamentodados() {
     ifstream arquivo("Dados.txt");//abertura de arquivo para leitura
     if (!arquivo.is_open()) {
         return;
@@ -128,7 +129,7 @@ void lista_de_alunos_disciplinas() {
                 getline(arquivo, linha);
                 aluno.nomeA = linha;
                 getline(arquivo, linha);
-                aluno.CPF = stoi(linha);
+                aluno.CPF = linha;
                 cout << aluno.codigoA << ' ' << aluno.nomeA << ' ' << aluno.CPF << '\n';
                 alunos.push_back(aluno);
                 
@@ -177,27 +178,56 @@ void inicializacao(){
     cout<<"6. Alunos nessa disciplina."<< endl;
     cout<<"7. Disciplinas desse Aluno."<< endl;
     cout<<"8. Salvamentos de dados.\n";
-    cout<<"9. Carregamento de dados:\nLista de alunos, disciplinas e matriculas ate o ultimo salvamento.\n";
+    cout<<"9. Lista de alunos, disciplinas e matriculas.\n";
     cout<<"10.Listagem de alunos e disciplinas por periodo:\n";
     cout<<"11. Fechar o programa.\n";
 }
 
 void inserir_aluno(){
     Aluno aluno;
-    cout<< " Escreva o codigo do aluno:\n RESTRICAO: Primeiro numero diferente de 0 \n";
-    cin>> aluno.codigoA;
+    int codigo, a=0;
+    string documento;
+    while(!a){
+        cout<< " Escreva o codigo do aluno:\n RESTRICAO: o codigo deve estar entre 10000 e 99999!\n";
+        cin>> codigo;
+        if(codigo>=10000 && codigo <100000){
+            aluno.codigoA=codigo;
+            a+=1;
+        }
+    else
+     cout<<"Esse codigo e invalido, digite novamente.";
+    }
     cout<<"\n Escreva o nome do aluno:\n";
     cin.ignore();
     getline(cin,aluno.nomeA);
-    cout<< "\n Escreva o CPF do aluno:\n";
-    cin>>aluno.CPF;
+    while(a){
+        cout<< " Escreva o CPF do aluno:\n RESTRICAO: o CPF deve ser escrito da forma XXX.XXX.XXX-XX !\n";
+        getline(cin,documento);
+        if(documento.length()!=14){
+            cout<<"Esse codigo e invalido, digite novamente.";
+        }
+        else{
+            aluno.CPF=documento;
+            a-=1;
+        }
+    }
+    
     alunos.push_back(aluno);
 }
 
 void inserir_disciplina(){
     Disciplina disciplina;
-    cout<<" Escreva o codigo da disciplina:\n"<< "OBS: ocodigo nao pode começar com 0.\n";
-    cin>> disciplina.codigoD;
+    int a=0, codigo;
+    while(!a){
+        cout<<" Escreva o codigo da disciplina:\n"<< "RESTRICAO: o codigo deve estar entre 1000 e 9999.\n";
+        cin>> codigo;
+        if(codigo>=1000 && codigo <10000){
+            disciplina.codigoD=codigo;
+            a+=1;
+        }
+        else
+            cout<<"Esse codigo e invalido, digite novamente.";
+        }
     cout<<"\n Escreva o nome da disciplina:\n (Se tiver um numero digite em algarismos romanos)\n";
     cin.ignore();
     getline(cin,disciplina.nomeD);
@@ -227,7 +257,7 @@ void remover_aluno(){
     cout<<"\n Digite o codigo do aluno que sera removido:\n";
     cin>> codigo;
     vector<Matricula>:: iterator j;
-    for( j= matriculas.begin(); j!=matriculas.end(); j++){
+    for( j= matriculas.begin(); j!=matriculas.end();){
         if(j->codigo_aluno == codigo)
         {   cout<<"esse alunos estava cursando algumas disciplinas.\n";
            j= matriculas.erase(j);}
@@ -329,9 +359,10 @@ void Lista_periodo(){
     Disciplina disciplina;
     int a=0, d=0;
     bool periodoencontrado=false , alunoencontrado=false, disciplinaencontrada=false;
-    cout<<"\n Escolha o periodo para ser listado:(EX: 2018.1)\n";
-    cout<<"\n Alunos matriculados no periodo "<<per<<":"<< endl;
+    cout<<"\n Escolha o periodo para ser listado:(EX: Ano.Semestre)\n";
+    cout<<"\n Alunos matriculados no periodo :"<< endl;
     cin>>per;
+    cout<< "PERIODO: "<<per<<endl;
     vector<Matricula>:: iterator i;
     for( i=matriculas.begin();i!=matriculas.end(); i++){
         if(i->periodo == per){
@@ -347,9 +378,10 @@ void Lista_periodo(){
             if(!alunoencontrado){
                 cout<<"\nNao ha aluno cadastrado com esse codigo!\n"; 
             }}}
-    cout<<"\n Disciplinas matriculadas nesse periodo:\n"<<per<<":"<< endl;
+    cout<<"\n Disciplinas matriculadas nesse periodo::"<< endl;
     for( i=matriculas.begin();i!=matriculas.end(); i++){
         if(i->periodo == per){
+            disciplinaencontrada=true;
             vector<Disciplina> :: iterator k;
             for(k=disciplinas.begin(); k!=disciplinas.end(); k++){
                 if(i->codigo_disciplina == k->codigoD){
@@ -357,12 +389,31 @@ void Lista_periodo(){
                     d+=1;
                     cout<<d<<"." <<k->nomeD<< "\n";
                 }
-            }}
+            }
             if(!disciplinaencontrada){
                 cout << "\nNao ha disciplina cadastrada com esse codigo!\n";}
-        }
+        }}
     
     if(!periodoencontrado){
         cout << "\nNao ha esse periodo na faculdade!\n"; 
+    }}
+
+void lista_de_alunos_disciplinas(){
+    int a=0, d=0,m=0;
+    vector<Aluno> :: iterator i;
+    cout<<"\t\t\t ALUNOS: \n";
+    for(i=alunos.begin();i!=alunos.end();i++){
+        a+=1;
+        cout<<a<<'.'<< i->nomeA<< ' '<< i->codigoA<< ' '<< i->CPF<< endl;
+    }
+    cout<< "\t\t\t DISCIPLINAS:\n";
+    for(vector<Disciplina>::iterator j=disciplinas.begin(); j!=disciplinas.end(); j++){
+        d+=1;
+        cout<<d<<'.'<< j->nomeD<< ' '<< j->codigoD<< ' '<< j->professor<< ' '<< j->credito<< endl;
+    }
+    cout<< "\t\t\t MATRICULAS:\n";
+    for(vector<Matricula>::iterator k=matriculas.begin(); k!=matriculas.end(); k++){
+        m+=1;
+        cout<<m<<'.'<< k->codigo_aluno<< ' '<< k->codigo_disciplina<< ' '<< k->periodo<< endl;
     }
 }
