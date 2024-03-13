@@ -3,6 +3,8 @@
 #include <string>
 #include <thread>
 
+//falta perguntar o periodo do aluno pra ver quais disciplinas ele cursa naquele periodo
+//fazer o msm pra disciplinas
 using namespace std;
 
 struct Aluno {int codigoA; string nomeA; string CPF; };
@@ -32,10 +34,11 @@ vector <Matricula> matriculas;
 
 int main(){
     int opcao=0;
+    char a='s';
     carregamentodados();
     inicio:
     inicializacao();
-    cout<< "\t\t\tBom dia!\n"<< "Digite o numero da sua opcao:\n ";
+    cout<< "\t\t\tBom dia!\n"<< "Digite a sua opcao:\n ";
     cin >> opcao;
     switch(opcao){
         case 1:
@@ -88,7 +91,13 @@ int main(){
     }
     arquivo_de_dados();
     cout<<"\nALTERACOES SALVAS!\n";
-    goto inicio;
+    cout<<"\nVoce quer voltar ao menu?S/N\n";
+    cin>> a;
+    if(a=='s'|| a=='S')
+        goto inicio;
+    else 
+        cout<<"\nPrograma Encerrado.";
+        return 0;
 
 }
 
@@ -338,13 +347,17 @@ void remover_disciplina(){
 
 void disciplinas_do_aluno(){
     int z=0, codigo;
+    string per;
     bool alunoencontrado=false;
-    cout<<"\n Digite o codigo do aluno:\n";
+    cout<<"\nDigite o codigo do aluno:\n";
     cin>> codigo;
+    cout<<"\n Digite o periodo em que o aluno esta:\n";
+    cin>>per;
     vector<Matricula>::iterator i;
     for( i= matriculas.begin(); i!=matriculas.end(); i++){
-        if(i->codigo_aluno  == codigo){
-            cout<<"\n Essas sao as disciplinas que esse aluno esta cursando:\n";
+        if(i->codigo_aluno  == codigo && i->periodo == per){
+            alunoencontrado=true;
+            cout<<"\nEssas sao as disciplinas que esse aluno esta cursando nesse periodo:\n";
             vector<Disciplina>::iterator j;
             for(j=disciplinas.begin(); j!=disciplinas.end();j++){
                 if(j->codigoD== i-> codigo_disciplina){
@@ -355,20 +368,23 @@ void disciplinas_do_aluno(){
         }
     }
     if(!alunoencontrado){
-        cout << "\nNao ha aluno cadastrado com esse codigo!\n";   
+        cout << "\nEsse aluno nao esta cursando disciplinas nesse periodo!\n";   
     }
 }
 
 void alunos_da_disciplina(){
     int z=0, codigo;
+    string per;
     bool disciplinaencontrada=false;
     cout<<"\n Digite o codigo da disciplina:\n";
     cin>> codigo;
-    cout<<"\n Esses sao os alunos que estao matriculados nessa disciplina:\n";
+    cout<<"\nDigite o periodo em que essa disciplina esta sendo aplicada:\n";
+    cin>> per;
     vector<Matricula>::iterator i;
     for(i= matriculas.begin(); i!=matriculas.end(); i++){
-        if(i->codigo_disciplina==codigo){
+        if(i->codigo_disciplina==codigo && i->periodo == per){
             disciplinaencontrada = true;
+            cout<<"\n Esses sao os alunos que estao matriculados nessa disciplina:\n";
             vector<Aluno>::iterator j;
             for( j=alunos.begin(); j!=alunos.end();j++){
                 if(j->codigoA == i->codigo_aluno){
@@ -379,7 +395,7 @@ void alunos_da_disciplina(){
         }
     }
     if(!disciplinaencontrada){
-        cout << "\nNao ha disciplina cadastrada com esse codigo!\n";
+        cout << "\nEssa disciplina nao esta sendo ministrada nesse periodo\n";
     }
 }
 
