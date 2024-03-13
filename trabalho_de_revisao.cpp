@@ -71,23 +71,23 @@ int main(){
             cout<<"\n Voce escolheu a opcao de ver quais disciplinas esse aluno cursa \n";
             disciplinas_do_aluno();
             break;
-        
         case 8:
-            cout<< "\n Salvamos os dados inseridos!\n";
-            arquivo_de_dados();
-            break;
-        case 9:
             cout<< "\n Aqui esta a lista cadastrada ate agora:\n \n";
             lista_de_alunos_disciplinas();
             break;
-        case 10:
+        case 9:
             cout<<"\n Voce escolheu a listagem de alunos e disciplinas por periodo:\n";
             Lista_periodo();
             break;
-        case 11:
-            cout<<"\n Voce escolheu encerrar o programa!";
+        case 10:
+            cout<<"\n Voce escolheu encerrar o programa!\n";
+            cout<< "\n Salvando os dados inseridos...\n";
+            cout<<"\nDados salvos! Programa encerrado.\n";
+            arquivo_de_dados();
             return 0;
     }
+    arquivo_de_dados();
+    cout<<"\nALTERACOES SALVAS!\n";
     goto inicio;
 
 }
@@ -118,7 +118,7 @@ void carregamentodados() {
         return;
     }
 
-    string linha, linhaanterior;
+    string linha;
     while (getline(arquivo, linha))//lendo o arquivo armazenando uma string
      {
         if (linha == "Alunos Cadastrados:") {
@@ -151,7 +151,7 @@ void carregamentodados() {
         if (linha == "Matriculas feitas:") {
             cout<< "\nMatriculas ate agora:(codigo do aluno, codigo da disciplina, periodo)\n";}
             if(arquivo.eof()){
-            cout<<"Nao ha alunos matriculados\n\n";}
+                cout<<"Nao ha alunos matriculados\n\n";}
             while (getline(arquivo, linha)) {
                 Matricula matricula;
                 matricula.codigo_aluno = stoi(linha);
@@ -169,18 +169,17 @@ void carregamentodados() {
 }
 
 void inicializacao(){
-    cout<< " =====MENU=====\n";
-    cout<<"1. Inserir Aluno."<< endl;
-    cout<<"2. Remover Aluno." << endl;
-    cout<<"3. Inserir Disciplina. "<< endl;
-    cout<<"4. Remover Disciplina."<< endl;
-    cout<<"5. Realizar matricula."<< endl;
-    cout<<"6. Alunos nessa disciplina."<< endl;
-    cout<<"7. Disciplinas desse Aluno."<< endl;
-    cout<<"8. Salvamentos de dados.\n";
-    cout<<"9. Lista de alunos, disciplinas e matriculas.\n";
-    cout<<"10.Listagem de alunos e disciplinas por periodo:\n";
-    cout<<"11. Fechar o programa.\n";
+    cout<< " \n\t\t======MENU======\n\n";
+    cout<<"1. Inserir Aluno................................"<< endl;
+    cout<<"2. Remover Aluno................................" << endl;
+    cout<<"3. Inserir Disciplina..........................."<< endl;
+    cout<<"4. Remover Disciplina..........................."<< endl;
+    cout<<"5. Realizar matricula..........................."<< endl;
+    cout<<"6. Alunos nessa disciplina......................"<< endl;
+    cout<<"7. Disciplinas desse Aluno......................"<< endl;
+    cout<<"8. Lista de alunos, disciplinas e matriculas....\n";
+    cout<<"9. Listagem de alunos e disciplinas por periodo:\n";
+    cout<<"10. Fechar o programa...........................\n";
 }
 
 void inserir_aluno(){
@@ -362,7 +361,7 @@ void Lista_periodo(){
     cout<<"\n Escolha o periodo para ser listado:(EX: Ano.Semestre)\n";
     cout<<"\n Alunos matriculados no periodo :"<< endl;
     cin>>per;
-    cout<< "PERIODO: "<<per<<endl;
+    cout<< "\t\t\tPERIODO: "<<per<<endl;
     vector<Matricula>:: iterator i;
     for( i=matriculas.begin();i!=matriculas.end(); i++){
         if(i->periodo == per){

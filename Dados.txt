@@ -2,15 +2,18 @@ Alunos Cadastrados:
 10000
 joao
 231.324.112-32
-20000
-romeu
-495.823.122-42
 30000
 teodoro
 968.273.412-00
 40000
 tulio
 757.737.821-09
+20000
+romeu
+123.593.981-90
+21345
+pedro
+123.890.000-98
 Disciplinas Cadastradas:
 2121
 historia
@@ -20,10 +23,17 @@ roberto
 geografia
 sara
 2
+4212
+fisicaIII
+romulo
+5
 Matriculas feitas:
 10000
 1000
 2022.1
 20000
 2121
-2021.1
+2022.1
+20000
+4212
+2021.2
