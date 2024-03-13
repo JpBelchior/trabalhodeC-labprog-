@@ -353,11 +353,11 @@ void disciplinas_do_aluno(){
     cin>> codigo;
     cout<<"\n Digite o periodo em que o aluno esta:\n";
     cin>>per;
+    cout<<"\nEssas sao as disciplinas que esse aluno esta cursando nesse periodo:\n";
     vector<Matricula>::iterator i;
     for( i= matriculas.begin(); i!=matriculas.end(); i++){
         if(i->codigo_aluno  == codigo && i->periodo == per){
             alunoencontrado=true;
-            cout<<"\nEssas sao as disciplinas que esse aluno esta cursando nesse periodo:\n";
             vector<Disciplina>::iterator j;
             for(j=disciplinas.begin(); j!=disciplinas.end();j++){
                 if(j->codigoD== i-> codigo_disciplina){
@@ -380,11 +380,11 @@ void alunos_da_disciplina(){
     cin>> codigo;
     cout<<"\nDigite o periodo em que essa disciplina esta sendo aplicada:\n";
     cin>> per;
+    cout<<"\n Esses sao os alunos que estao matriculados nessa disciplina:\n";
     vector<Matricula>::iterator i;
     for(i= matriculas.begin(); i!=matriculas.end(); i++){
         if(i->codigo_disciplina==codigo && i->periodo == per){
             disciplinaencontrada = true;
-            cout<<"\n Esses sao os alunos que estao matriculados nessa disciplina:\n";
             vector<Aluno>::iterator j;
             for( j=alunos.begin(); j!=alunos.end();j++){
                 if(j->codigoA == i->codigo_aluno){
