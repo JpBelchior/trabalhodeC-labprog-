@@ -18,12 +18,12 @@ void inserir_disciplina();// adicionando diciplina no vector disciplinas
 void realizar_matricula();// adicionando a matricula no vector matriculas
 void remover_disciplina();// removendo disciplina do vector disciplina
 void carregarDados(); // lendo os dados escritos no arquivo de texto
-void disciplinas_do_aluno();
+void disciplinas_do_aluno();//quais disiciplina aquele aluno cursa
 void remover_aluno();// removendo aluno do vector alunos
-void alunos_da_disciplina();
-void carregamentodados();
-void Lista_periodo();
-void lista_de_alunos_disciplinas();
+void alunos_da_disciplina();//quais alunos estao cadastrados naquela disciplina
+void carregamentodados();//carrega tudo que esta no arquivo antes da execuçao do programa
+void Lista_periodo();//mostra quais alunos e disciplinas estao cadastrados naquele periodo
+void lista_de_alunos_disciplinas();//mostra todos os alunos e disciplinas cadastradas
 
 vector <Aluno> alunos;
 vector <Disciplina> disciplinas;
@@ -35,7 +35,7 @@ int main(){
     carregamentodados();
     inicio:
     inicializacao();
-    cout<< " Bom dia!\n"<< " Digite o numero da sua opcao:\n ";
+    cout<< "\t\t\tBom dia!\n"<< "Digite o numero da sua opcao:\n ";
     cin >> opcao;
     switch(opcao){
         case 1:
@@ -80,8 +80,8 @@ int main(){
             Lista_periodo();
             break;
         case 10:
-            cout<<"\n Voce escolheu encerrar o programa!\n";
-            cout<< "\n Salvando os dados inseridos...\n";
+            cout<<"\nVoce escolheu encerrar o programa!\n";
+            cout<< "\n\t\tSalvando os dados inseridos...\n";
             cout<<"\nDados salvos! Programa encerrado.\n";
             arquivo_de_dados();
             return 0;
@@ -180,21 +180,32 @@ void inicializacao(){
     cout<<"8. Lista de alunos, disciplinas e matriculas....\n";
     cout<<"9. Listagem de alunos e disciplinas por periodo:\n";
     cout<<"10. Fechar o programa...........................\n";
+    cout<<"\n-----------------------------------------------------\n";
 }
 
 void inserir_aluno(){
     Aluno aluno;
     int codigo, a=0;
+    bool codigoapto=true, CPFapto=true;
     string documento;
     while(!a){
         cout<< " Escreva o codigo do aluno:\n RESTRICAO: o codigo deve estar entre 10000 e 99999!\n";
         cin>> codigo;
-        if(codigo>=10000 && codigo <100000){
-            aluno.codigoA=codigo;
+        vector<Aluno>:: iterator i;
+        for (i=alunos.begin(); i!=alunos.end(); i++){
+            if(i->codigoA==codigo){
+                cout<<"\nO aluno "<< i->nomeA<< " ja possui esse codigo, digite novamente.\n";
+                a-=1;
+                codigoapto=false;
+                break;
+            }}
+        if(codigo>=10000 && codigo <100000 ){
             a+=1;
+            if(codigoapto)
+                aluno.codigoA=codigo;
         }
-    else
-     cout<<"Esse codigo e invalido, digite novamente.";
+        else
+            cout<<"Esse codigo e invalido, digite novamente.";
     }
     cout<<"\n Escreva o nome do aluno:\n";
     cin.ignore();
@@ -202,12 +213,22 @@ void inserir_aluno(){
     while(a){
         cout<< " Escreva o CPF do aluno:\n RESTRICAO: o CPF deve ser escrito da forma XXX.XXX.XXX-XX !\n";
         getline(cin,documento);
+        vector<Aluno> :: iterator i;
+        for( i=alunos.begin();i!=alunos.end();i++){
+            if(i->CPF==documento){
+                cout<< "\nEsses CPF pertence ao aluno "<<i->nomeA<<". Digite novamente.\n";
+                a+=1;
+                CPFapto=false;
+                break;
+            }
+        }
         if(documento.length()!=14){
             cout<<"Esse codigo e invalido, digite novamente.";
         }
         else{
-            aluno.CPF=documento;
             a-=1;
+            if(CPFapto)
+                aluno.CPF=documento;
         }
     }
     
@@ -217,12 +238,22 @@ void inserir_aluno(){
 void inserir_disciplina(){
     Disciplina disciplina;
     int a=0, codigo;
+    bool codigoapto=true;
     while(!a){
         cout<<" Escreva o codigo da disciplina:\n"<< "RESTRICAO: o codigo deve estar entre 1000 e 9999.\n";
         cin>> codigo;
-        if(codigo>=1000 && codigo <10000){
-            disciplina.codigoD=codigo;
+        vector<Disciplina>:: iterator i;
+        for (i=disciplinas.begin(); i!=disciplinas.end(); i++){
+            if(i->codigoD==codigo){
+                cout<<"\nA Disciplina "<< i->nomeD<< " ja possui esse codigo, digite novamente.\n";
+                a-=1;
+                codigoapto=false;
+                break;
+            }}
+        if(codigo>=1000 && codigo <10000 ){
             a+=1;
+            if(codigoapto)
+                disciplina.codigoD=codigo;
         }
         else
             cout<<"Esse codigo e invalido, digite novamente.";
