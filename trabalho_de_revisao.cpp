@@ -1,10 +1,7 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <string>
-#include <thread>
 
-//falta perguntar o periodo do aluno pra ver quais disciplinas ele cursa naquele periodo
-//fazer o msm pra disciplinas
 using namespace std;
 
 struct Aluno {int codigoA; string nomeA; string CPF; };
@@ -27,10 +24,12 @@ void carregamentodados();//carrega tudo que esta no arquivo antes da execuçao d
 void Lista_periodo();//mostra quais alunos e disciplinas estao cadastrados naquele periodo
 void lista_de_alunos_disciplinas();//mostra todos os alunos e disciplinas cadastradas
 
+//Criando os vector's que armazenarao dinamicamente os dados pedidos
 vector <Aluno> alunos;
 vector <Disciplina> disciplinas;
-vector <Matricula> matriculas;
-
+vector <Matricula> matriculas;//vector que vai unir as informaçoes do aluno com a da disciplina
+vector<string> verificacaoaluno;//vector para retirar repetiçoes de alunos que fazem mais de uma disciplina no periodo da lista
+vector<string> verificacaodisciplina;
 
 int main(){
     int opcao=0;
@@ -398,7 +397,7 @@ void alunos_da_disciplina(){
         cout << "\nEssa disciplina nao esta sendo ministrada nesse periodo\n";
     }
 }
-
+//falta nao printar aluno repetido se ele tiver matriculado em mais de uma disciplina no periodo
 void Lista_periodo(){
     string per;
     Aluno aluno;
@@ -414,16 +413,21 @@ void Lista_periodo(){
         if(i->periodo == per){
             periodoencontrado=true;
             vector<Aluno> :: iterator j;
-            for(j=alunos.begin(); j!=alunos.end(); j++){
+            for(j=alunos.begin(); j!=alunos.end();j++){
                 if(i->codigo_aluno == j->codigoA){
                     alunoencontrado=true;
-                    a+=1;
-                    cout<<a<<"." <<j->nomeA<< "\n";
+                    verificacaoaluno.push_back(j->nomeA);    
                 }
             }
             if(!alunoencontrado){
                 cout<<"\nNao ha aluno cadastrado com esse codigo!\n"; 
             }}}
+    vector<string>:: iterator k;
+    vector<string>:: iterator verificacaounica1 = unique(verificacaoaluno.begin(), verificacaoaluno.end());
+    verificacaoaluno.erase(verificacaounica1, verificacaoaluno.end());
+    for(k=verificacaoaluno.begin(); k!=verificacaoaluno.end() ;k++){
+        a+=1;
+        cout<<a<<"." <<*k<< "\n"; }
     cout<<"\n Disciplinas matriculadas nesse periodo::"<< endl;
     for( i=matriculas.begin();i!=matriculas.end(); i++){
         if(i->periodo == per){
@@ -432,13 +436,18 @@ void Lista_periodo(){
             for(k=disciplinas.begin(); k!=disciplinas.end(); k++){
                 if(i->codigo_disciplina == k->codigoD){
                     disciplinaencontrada=true;
-                    d+=1;
-                    cout<<d<<"." <<k->nomeD<< "\n";
+                    verificacaodisciplina.push_back(k->nomeD);
                 }
             }
             if(!disciplinaencontrada){
                 cout << "\nNao ha disciplina cadastrada com esse codigo!\n";}
         }}
+    vector<string>:: iterator l;
+    vector<string>:: iterator verificacaounica2 = unique(verificacaodisciplina.begin(), verificacaodisciplina.end());//colocando elementos reptidos pro final do vetor
+    verificacaodisciplina.erase(verificacaounica2, verificacaodisciplina.end());//apagando elementos repetidos.
+    for(l=verificacaodisciplina.begin(); l!=verificacaodisciplina.end() ;l++){
+        d+=1;
+        cout<<d<<"." <<*l<< "\n"; }
     
     if(!periodoencontrado){
         cout << "\nNao ha esse periodo na faculdade!\n"; 
@@ -463,3 +472,4 @@ void lista_de_alunos_disciplinas(){
         cout<<m<<'.'<< k->codigo_aluno<< ' '<< k->codigo_disciplina<< ' '<< k->periodo<< endl;
     }
 }
+
