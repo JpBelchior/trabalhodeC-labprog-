@@ -1,2 +1,1 @@
-disciplina.nomeD<< "\n";
-                }
+

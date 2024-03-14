@@ -12,7 +12,7 @@ struct Matricula {int codigo_aluno; int codigo_disciplina; string periodo; };
 
 void inicializacao(); // menu de opçoes
 void arquivo_de_dados(); //inserindo os dados de cada vector no arquivo
-void inserir_aluno(); // adicionando alunos no vector alunos
+void inserir_aluno(); // adicionando alunos no vec₢tor alunos
 void inserir_disciplina();// adicionando diciplina no vector disciplinas
 void realizar_matricula();// adicionando a matricula no vector matriculas
 void remover_disciplina();// removendo disciplina do vector disciplina
@@ -291,16 +291,18 @@ void realizar_matricula(){
 
 void remover_aluno(){
     int codigo=0;
-    bool n=false;
+    bool n=false, matriculaacabou=false;
     cout<<"\n Digite o codigo do aluno que sera removido:\n";
     cin>> codigo;
     vector<Matricula>:: iterator j;
     for( j= matriculas.begin(); j!=matriculas.end();){
         if(j->codigo_aluno == codigo)
-        {   cout<<"esse alunos estava cursando algumas disciplinas.\n";
+        {   matriculaacabou=true;
            j= matriculas.erase(j);}
         else 
             j++;}
+    if(matriculaacabou)
+        cout<<"esse alunos estava cursando algumas disciplinas.\n";
     vector<Aluno> :: iterator i;
     for( i= alunos.begin(); i!=alunos.end();)//criando ima variavel i do tipo do elemento de alunos e vasculhando o vector do inicio ao fim
         {
@@ -318,16 +320,18 @@ void remover_aluno(){
 
 void remover_disciplina(){
     int codigo=0;
-    bool n=false;
+    bool n=false, matriculaacabou=false;
     cout<<"\n Digite o codigo da disciplina que sera removida:\n";
     cin>> codigo;
     vector<Matricula>:: iterator j;
     for( j= matriculas.begin(); j!=matriculas.end();){
         if(j->codigo_disciplina == codigo)
-        {   cout<<"havia alunos matriculados nessa disciplina.\n";
+        { matriculaacabou=true;
             matriculas.erase(j);}
         else 
             j++;}
+    if(matriculaacabou)
+         cout<<"havia alunos matriculados nessa disciplina.\n";
     vector<Disciplina>::iterator i;
     for( i= disciplinas.begin(); i!=disciplinas.end();){
         if(i->codigoD == codigo)

@@ -19,18 +19,15 @@ Disciplinas Cadastradas:
 historia
 roberto
 1
-1000
-geografia
-sara
-2
 4212
 fisicaIII
 romulo
 5
+9876
+lab prog
+Cel Duarte
+4
 Matriculas feitas:
-10000
-1000
-2022.1
 20000
 2121
 2022.1
@@ -43,6 +40,9 @@ Matriculas feitas:
 40000
 4212
 2021.1
-40000
-1000
-2021.1
+10000
+2121
+2022.1
+10000
+9876
+2022.1
