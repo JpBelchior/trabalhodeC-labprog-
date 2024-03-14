@@ -82,7 +82,7 @@ int main(){
             cout<<"\nVoce escolheu a listagem de alunos e disciplinas por periodo:\n";
             Lista_periodo();
             break;
-        case 10:
+        case 0:
             cout<<"\nVoce escolheu encerrar o programa!\n";
             cout<< "\n\t\tSalvando os dados inseridos...\n";
             cout<<"\nDados salvos! Programa encerrado.\n";
@@ -90,13 +90,13 @@ int main(){
             return 0;
     }
     arquivo_de_dados();
-    cout<<"\nALTERACOES SALVAS!\n";
     cout<<"\nVoce quer voltar ao menu?S/N\n";
     cin>> a;
     if(a=='s'|| a=='S')
         goto inicio;
     else 
         cout<<"\nPrograma Encerrado.";
+        cout<<"\nALTERACOES SALVAS!\n";
         return 0;
 
 }
@@ -197,7 +197,7 @@ void inicializacao(){
     cout<<"7. Disciplinas desse Aluno......................"<< endl;
     cout<<"8. Lista de alunos, disciplinas e matriculas....\n";
     cout<<"9. Listagem de alunos e disciplinas por periodo.\n";
-    cout<<"10. Fechar o programa...........................\n";
+    cout<<"0. Fechar o programa............................\n";
     cout<<"\n-----------------------------------------------------\n";
 }
 
