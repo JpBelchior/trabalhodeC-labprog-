@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <string>
+//REPAROS
+//1) opçao de remover matricula
+//2) nao poder matricular um aluino numa msm disciplina nop msm semestre
 
 using namespace std;
 
@@ -18,6 +21,7 @@ void inicializacao(); // menu de opçoes
 void inserir_aluno(); // adicionando alunos no vec₢tor alunos
 void inserir_disciplina();// adicionando diciplina no vector disciplinas
 void realizar_matricula();// adicionando a matricula no vector matriculas
+void remover_matricula();//removendo matricula 
 void remover_aluno();// removendo aluno do vector alunos
 void remover_disciplina();// removendo disciplina do vector disciplina
 void disciplinas_do_aluno();//quais disiciplina aquele aluno cursa
@@ -66,19 +70,23 @@ int main(){
             realizar_matricula();
             break;
         case 6:
+            cout<<"\nVoce escolheu a opcao de desmatricular um aluno de alguma disciplina:\nPara isso, siga os comandos a seguir.\n";
+            remover_matricula();
+            break;
+        case 7:
             cout<<"\nVoce escolheu a opcao de ver quais alunos estao matriculados nessa disciplina\n";
             alunos_da_disciplina();
             break;
 
-        case 7:
+        case 8:
             cout<<"\nVoce escolheu a opcao de ver quais disciplinas esse aluno cursa \n";
             disciplinas_do_aluno();
             break;
-        case 8:
+        case 9:
             cout<< "\nAqui esta a lista cadastrada ate agora:\n \n";
             lista_de_alunos_disciplinas();
             break;
-        case 9:
+        case 10:
             cout<<"\nVoce escolheu a listagem de alunos e disciplinas por periodo:\n";
             Lista_periodo();
             break;
@@ -193,10 +201,11 @@ void inicializacao(){
     cout<<"3. Inserir Disciplina..........................."<< endl;
     cout<<"4. Remover Disciplina..........................."<< endl;
     cout<<"5. Realizar matricula..........................."<< endl;
-    cout<<"6. Alunos nessa disciplina......................"<< endl;
-    cout<<"7. Disciplinas desse Aluno......................"<< endl;
-    cout<<"8. Lista de alunos, disciplinas e matriculas....\n";
-    cout<<"9. Listagem de alunos e disciplinas por periodo.\n";
+    cout<<"6. Remover matricula............................"<< endl;
+    cout<<"7. Alunos nessa disciplina......................"<< endl;
+    cout<<"8. Disciplinas desse Aluno......................"<< endl;
+    cout<<"9. Lista de alunos, disciplinas e matriculas....\n";
+    cout<<"10. Listagem de alunos e disciplinas por periodo.\n";
     cout<<"0. Fechar o programa............................\n";
     cout<<"\n-----------------------------------------------------\n";
 }
@@ -521,5 +530,31 @@ void lista_de_alunos_disciplinas(){
         m+=1;
         cout<<m<<'.'<< k->codigo_aluno<< ' '<< k->codigo_disciplina<< ' '<< k->periodo<< endl;
     }
+}
+
+void remover_matricula() {
+    int codigoa, codigod;
+    string per;
+    bool n=false;
+    cout<<"\nDigite o codigo do aluno sera desmatriculado:\n";
+    cin>>codigoa;
+    cout<<"\nDigite o codigo da disciplina a qual o aluno sera desmatriculado:\n";
+    cin>>codigod;
+    cout<<"\nDigite o perido no qual o aluno ta matriculado:\n";
+    cin>>per;
+    vector<Matricula> :: iterator i;
+    for( i= matriculas.begin(); i!=matriculas.end();)
+        {
+        if(i->codigo_aluno == codigoa && i->codigo_disciplina==codigod && i->periodo==per)//i está toamndo o valor de cada elemento do vetor e apontando pra o odigo daquela struct
+        {   n=true;
+            i=matriculas.erase(i);
+            cout<<"Aluno de codigo " <<codigoa << " foi desmatriculado da disciplina de codigo "<<codigod<<" no periodo "<<per<< endl;
+        }
+        else
+            i++;
+        }
+    if(!n){
+        cout<< "\nEssas informacoes nao correspondem a nenhuma matricula no nosso registro. Tente novamente\n";}
+
 }
 
