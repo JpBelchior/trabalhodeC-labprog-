@@ -297,15 +297,28 @@ void inserir_disciplina(){
 
 void realizar_matricula(){
     Matricula matricula;
+    int codigoa, codigod;
+    bool n=false;
     cout<<"\n Escreva o codigo do aluno que realizara a matricula:\n";
-    cin>> matricula.codigo_aluno;
+    cin>> codigoa;
     cout<<"\n Escreva o codigo da disciplina de matricula:\n";
     cin.ignore();
-    cin >> matricula.codigo_disciplina;
-    cout<<"\n Escreva o periodo de matricula da forma: ano semestre\n EX:2018.2 \n";
-    cin.ignore();
-    getline(cin, matricula.periodo);
-    matriculas.push_back(matricula);
+    cin >> codigod;
+    vector<Matricula> :: iterator i;
+    for( i=matriculas.begin(); i!=matriculas.end(); i++){
+        if(i->codigo_aluno==codigoa && i->codigo_disciplina==codigod)
+            cout<<"\nEsse aluno ja esta matriculado nessa disciplina";
+            n=true;
+    }
+    if(!n){
+        matricula.codigo_aluno=codigoa;
+        matricula.codigo_disciplina=codigod;
+        cout<<"\n Escreva o periodo de matricula da forma: ano semestre\n EX:2018.2 \n";
+        getline(cin, matricula.periodo);
+        matriculas.push_back(matricula);
+    }
+
+    
 }
 
 void remover_aluno(){
