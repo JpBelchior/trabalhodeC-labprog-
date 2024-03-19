@@ -1,9 +1,6 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <string>
-//REPAROS
-//1) opçao de remover matricula
-//2) nao poder matricular um aluino numa msm disciplina nop msm semestre
 
 using namespace std;
 
@@ -307,7 +304,7 @@ void realizar_matricula(){
     vector<Matricula> :: iterator i;
     for( i=matriculas.begin(); i!=matriculas.end(); i++){
         if(i->codigo_aluno==codigoa && i->codigo_disciplina==codigod){
-            cout<<"\nEsse aluno ja esta matriculado nessa disciplina";
+            cout<<"\nEsse aluno ja esta matriculado nessa disciplina.";
             n=true;}
     }
     if(!n){
